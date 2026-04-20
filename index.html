@@ -1,7 +1,68 @@
 <!DOCTYPE html>
-<html>
-    <head></head>
-    <body>
-        Hello World
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maze Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="title">imazenium</div>
+
+        <div class="controls">
+            <select id="size">
+                <option value="20">Small (20x20)</option>
+                <option value="30">Medium (30x30)</option>
+                <option value="50">Large (50x50)</option>
+            </select>
+
+            <select id="variation">
+                <option value="free">Free</option>
+                <option value="obstacle">Obstacle</option>
+                <option value="tight">Tight</option>
+            </select>
+
+            <select id="danger">
+                <option value="1">Light</option>
+                <option value="3">Medium</option>
+                <option value="5">Hard</option>
+            </select>
+
+            <button id="startBtn">Start</button>
+        </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="body">
+        <div id="grid"></div>
+
+    <div class="instructions">
+        <p><span class="legend blue"></span> Blue - Player</p>
+        <p><span class="legend red"></span> Red - Enemy</p>
+        <p><span class="legend yellow"></span> Yellow - Puzzle</p>
+
+        <div class="objective">
+          <p><strong>Round: <span id="roundVal">0</span></strong></p>
+          <p><strong>Health: <span id="healthVal">3</span></strong></p>
+            Solve all puzzles → Unlock the exit
+        </div>
+    </div>
+    </div>
+
+</div>
+
+<div id="victoryScreen" style="display: none; text-align: center; color: white;">
+    <h1>CONGRATULATIONS!</h1>
+    <p>You survived all rounds.</p>
+    <img src="carlomolejon/Example.com/assets/squid-game-front-man.gif" alt="Victory" style="max-width: 100%; border-radius: 10px;">
+    <br>
+    <button onclick="location.reload()" style="margin-top: 20px;">Play Again</button>
+</div>
+
+<script src="script.js"></script>
+</body>
 </html>

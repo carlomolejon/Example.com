@@ -151,6 +151,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 function movePlayer(dx, dy) {
+    onst victoryScreen = document.getElementById("victoryScreen");
     let nx = player.x + dx;
     let ny = player.y + dy;
 
@@ -160,14 +161,22 @@ function movePlayer(dx, dy) {
     if (target.base === "wall") return;
     if (target.object === "enemy") { gameOver("Caught by an enemy!"); return; }
     
+    // Update your movePlayer function's exit logic:
     if (target.object === "exit") {
         if (round < maxRounds) {
             alert(`Round ${round} complete!`);
             round++;
             startRound();
         } else {
-            alert("Victory! You completed all rounds!");
+            // --- VICTORY SCREEN TRIGGER ---
             gameActive = false;
+            
+            // Hide the grid and controls
+            gridEl.style.display = "none";
+            document.getElementById("controls").style.display = "none"; // Hide your inputs/buttons
+            
+            // Show the victory screen
+            victoryScreen.style.display = "block";
         }
         return;
     }

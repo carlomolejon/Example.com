@@ -151,7 +151,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 function movePlayer(dx, dy) {
-    onst victoryScreen = document.getElementById("victoryScreen");
+    cancelAnimationFrameonst victoryScreen = document.getElementById("victoryScreen");
     let nx = player.x + dx;
     let ny = player.y + dy;
 

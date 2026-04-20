@@ -2,6 +2,9 @@ const gridEl = document.getElementById("grid");
 const startBtn = document.getElementById("startBtn");
 const healthDisplay = document.getElementById("healthVal"); 
 const roundDisplay = document.getElementById("roundVal"); 
+const victoryScreen = document.getElementById("victoryScreen");
+const controlsUI = document.getElementById("controls");
+const instructionsUI = document.getElementById("instructions");
 
 let size = 20;
 let grid = [];
@@ -10,7 +13,7 @@ let enemies = [];
 let moveCounter = 0;
 let solvedPuzzles = 0;
 let activePuzzle = null;
-let gameActive = false; // Start false until button click
+let gameActive = false; 
 let round = 1;
 let maxRounds = 3;
 
@@ -19,7 +22,6 @@ const puzzles = [
     { type: "math", question: "24 - 9?", answer: "15" },
     { type: "math", question: "5 * 6?", answer: "30" },
     { type: "math", question: "20 / 4?", answer: "5" },
-
     { type: "math", question: "8 + 17?", answer: "25" },
     { type: "math", question: "45 - 18?", answer: "27" },
     { type: "math", question: "7 * 7?", answer: "49" },
@@ -28,7 +30,6 @@ const puzzles = [
     { type: "math", question: "60 - 25?", answer: "35" },
     { type: "math", question: "9 * 8?", answer: "72" },
     { type: "math", question: "100 / 10?", answer: "10" },
-
     { type: "riddle", question: "What has to be broken before you can use it?", answer: "egg" },
     { type: "riddle", question: "I’m tall when I’m young, short when I’m old. What am I?", answer: "candle" },
     { type: "riddle", question: "What gets wetter the more it dries?", answer: "towel" },
@@ -51,6 +52,13 @@ function startGame() {
     round = 1;
     player.health = 3;
     gameActive = true;
+    
+    // Ensure game elements are visible if restarting
+    gridEl.style.display = "grid";
+    if(controlsUI) controlsUI.style.display = "flex";
+    if(instructionsUI) instructionsUI.style.display = "block";
+    victoryScreen.style.display = "none";
+
     startRound();
 }
 
@@ -61,7 +69,6 @@ function startRound() {
     activePuzzle = null;
     solvedPuzzles = 0;
     
-    // Set grid columns based on size
     gridEl.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
     
     generateGrid();
@@ -81,12 +88,10 @@ function generateGrid() {
 }
 
 function spawnElements() {
-    // Place Player
     player.x = 0;
     player.y = 0;
     grid[0][0].object = "player";
 
-    // Place Enemies
     let enemyCount = parseInt(document.getElementById("danger").value) || 5;
     for (let i = 0; i < enemyCount; i++) {
         let pos = getEmptyCell();
@@ -94,14 +99,12 @@ function spawnElements() {
         grid[pos.y][pos.x].object = "enemy";
     }
 
-    // Place Puzzles (Count increases with rounds)
     let puzzleCount = 2 + round; 
     for (let i = 0; i < puzzleCount; i++) {
         let pos = getEmptyCell();
         grid[pos.y][pos.x].object = "puzzle";
     }
 
-    // Place Walls
     let variation = document.getElementById("variation").value;
     let wallCount = variation === "tight" ? size * 5 : variation === "obstacle" ? size * 3 : size;
     for (let i = 0; i < wallCount; i++) {
@@ -145,13 +148,12 @@ document.addEventListener("keydown", (e) => {
     if (key === "d") dx = 1;
 
     if (dx !== 0 || dy !== 0) {
-        e.preventDefault(); // Prevent page scrolling
+        e.preventDefault(); 
         movePlayer(dx, dy);
     }
 });
 
 function movePlayer(dx, dy) {
-    const victoryScreen = document.getElementById("victoryScreen");
     let nx = player.x + dx;
     let ny = player.y + dy;
 
@@ -161,22 +163,13 @@ function movePlayer(dx, dy) {
     if (target.base === "wall") return;
     if (target.object === "enemy") { gameOver("Caught by an enemy!"); return; }
     
-    // Update your movePlayer function's exit logic:
     if (target.object === "exit") {
         if (round < maxRounds) {
             alert(`Round ${round} complete!`);
             round++;
             startRound();
         } else {
-            // --- VICTORY SCREEN TRIGGER ---
-            gameActive = false;
-            
-            // Hide the grid and controls
-            gridEl.style.display = "none";
-            document.getElementById("controls").style.display = "none"; // Hide your inputs/buttons
-            
-            // Show the victory screen
-            victoryScreen.style.display = "block";
+            showVictory();
         }
         return;
     }
@@ -186,7 +179,6 @@ function movePlayer(dx, dy) {
         return; 
     }
 
-    // Move player logic
     grid[player.y][player.x].object = null;
     player.x = nx;
     player.y = ny;
@@ -201,12 +193,12 @@ function moveEnemies() {
     for (let enemy of enemies) {
         let dx = Math.sign(player.x - enemy.x);
         let dy = Math.sign(player.y - enemy.y);
-
         let nx = enemy.x + dx;
         let ny = enemy.y + dy;
 
         if (nx >= 0 && ny >= 0 && nx < size && ny < size) {
             let target = grid[ny][nx];
+            // SPEC: Enemies don't delete puzzles or exits, and don't walk through walls
             if (target.base !== "wall" && !["enemy", "puzzle", "exit"].includes(target.object)) {
                 if (target.object === "player") {
                     gameOver("An enemy caught you!");
@@ -228,7 +220,7 @@ function openPuzzle(px, py) {
     if (userAnswer && userAnswer.toLowerCase().trim() === activePuzzle.answer.toLowerCase()) {
         alert("Correct!");
         solvedPuzzles++;
-        grid[py][px].object = null; // Remove puzzle
+        grid[py][px].object = null; 
         if (solvedPuzzles >= (2 + round)) spawnExit();
     } else {
         player.health--;
@@ -244,7 +236,6 @@ function openPuzzle(px, py) {
 }
 
 function spawnExit() {
-    // Clear existing exit first
     for (let y = 0; y < size; y++) {
         for (let x = 0; x < size; x++) {
             if (grid[y][x].object === "exit") grid[y][x].object = null;
@@ -252,6 +243,15 @@ function spawnExit() {
     }
     let pos = getEmptyCell();
     grid[pos.y][pos.x].object = "exit";
+    render();
+}
+
+function showVictory() {
+    gameActive = false;
+    gridEl.style.display = "none";
+    if(controlsUI) controlsUI.style.display = "none";
+    if(instructionsUI) instructionsUI.style.display = "none";
+    victoryScreen.style.display = "block";
 }
 
 function gameOver(msg) {

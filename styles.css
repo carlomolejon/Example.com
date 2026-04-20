@@ -1,0 +1,87 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #111;
+    color: white;
+}
+
+.legend {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    border-radius: 3px;
+    vertical-align: middle;
+}
+
+/* COLORS */
+.blue { background: blue; }
+.red { background: red; }
+.yellow { background: yellow; }
+
+.objective {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #444;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER 20% */
+.header {
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+}
+
+/* BODY 80% */
+.body {
+    height: 80%;
+    display: flex;
+}
+
+/* GRID 80% */
+#grid {
+    width: 80%;
+    display: grid;
+    background: #000;
+}
+
+/* INSTRUCTIONS 20% */
+.instructions {
+    width: 20%;
+    padding: 10px;
+    background: #1a1a1a;
+}
+
+/* TILE */
+.tile {
+    border: 1px solid #222;
+    box-sizing: border-box;
+}
+
+/* COLORS */
+.player { background: blue; }
+.enemy { background: red; }
+.wall { background: gray; }
+.puzzle { background: yellow; }
+.exit { background: lime; }

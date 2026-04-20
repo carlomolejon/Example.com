@@ -1,87 +1,176 @@
+/* Custom Properties for easy color swapping */
+:root {
+    --bg-dark: #0a0a0c;
+    --panel-bg: rgba(30, 30, 35, 0.8);
+    --accent-pink: #ff005a;
+    --neon-blue: #00f2ff;
+    --neon-yellow: #fde047;
+    --neon-red: #ff3e3e;
+    --neon-green: #39ff14;
+    --border-glow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
 body {
     margin: 0;
-    font-family: Arial;
-    background: #111;
-    color: white;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-dark);
+    color: #e0e0e0;
+    overflow: hidden; /* Prevents scrollbars during gameplay */
 }
 
-.legend {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin-right: 8px;
-    border-radius: 3px;
-    vertical-align: middle;
-}
-
-/* COLORS */
-.blue { background: blue; }
-.red { background: red; }
-.yellow { background: yellow; }
-
-.objective {
-    margin-top: 15px;
-    padding-top: 10px;
-    border-top: 1px solid #444;
-    font-size: 0.9rem;
-    color: #ccc;
-}
-
+/* CONTAINER & LAYOUT */
 .container {
     height: 100vh;
     display: flex;
     flex-direction: column;
+    background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0c 100%);
 }
 
-/* HEADER 20% */
+/* HEADER: 20% */
 .header {
     height: 20%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #222;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 2px solid var(--accent-pink);
+    box-shadow: 0 4px 20px rgba(255, 0, 90, 0.2);
+    z-index: 10;
 }
 
 .title {
-    font-size: 2rem;
-    margin-bottom: 10px;
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: #fff;
+    text-shadow: 0 0 10px var(--accent-pink), 0 0 20px var(--accent-pink);
+    margin-bottom: 5px;
 }
+
+/* BUTTONS / CONTROLS */
+button {
+    background: transparent;
+    color: white;
+    border: 1px solid var(--neon-blue);
+    padding: 8px 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: bold;
+    gap: 2rem;
+}
+
+/* Remove gap: 2rem; from your button { ... } block */
 
 .controls {
     display: flex;
-    gap: 10px;
+    gap: 2rem;       /* This goes on the PARENT of the buttons */
+    margin-top: 15px;
+    justify-content: center;
 }
 
-/* BODY 80% */
+button:hover {
+    background: var(--neon-blue);
+    color: black;
+    box-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* BODY: 80% */
 .body {
     height: 80%;
     display: flex;
+    padding: 10px;
+    gap: 15px;
 }
 
-/* GRID 80% */
+/* GRID AREA */
 #grid {
     width: 80%;
-    display: grid;
-    background: #000;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #333;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9);
+    position: relative;
 }
 
-/* INSTRUCTIONS 20% */
+/* TILES */
+.tile {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.1s ease-out;
+}
+
+/* GAME ENTITIES WITH GLOWS */
+.player { 
+    background: var(--neon-blue); 
+    box-shadow: inset 0 0 10px #fff, 0 0 15px var(--neon-blue);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Diamond Shape */
+    border-radius: 2px;
+}
+
+.enemy { 
+    background: var(--neon-red); 
+    box-shadow: 0 0 15px var(--neon-red);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Diamond Shape */
+}
+
+.wall { 
+    background: #2c2c2e; 
+    background-image: linear-gradient(45deg, #333 25%, #222 25%, #222 50%, #333 50%, #333 75%, #222 75%, #222 100%);
+    background-size: 10px 10px;
+}
+
+.puzzle { 
+    background: var(--neon-yellow); 
+    box-shadow: 0 0 15px var(--neon-yellow);
+    animation: pulse 1.5s infinite;
+}
+
+.exit { 
+    background: var(--neon-green); 
+    box-shadow: 0 0 20px var(--neon-green);
+}
+
+/* SIDEBAR / INSTRUCTIONS */
 .instructions {
     width: 20%;
-    padding: 10px;
-    background: #1a1a1a;
+    padding: 20px;
+    background: var(--panel-bg);
+    border-left: 1px solid #444;
+    backdrop-filter: blur(5px);
 }
 
-/* TILE */
-.tile {
-    border: 1px solid #222;
-    box-sizing: border-box;
+.legend-item {
+    margin-bottom: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
 }
 
-/* COLORS */
-.player { background: blue; }
-.enemy { background: red; }
-.wall { background: gray; }
-.puzzle { background: yellow; }
-.exit { background: lime; }
+.legend {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 12px;
+    border-radius: 2px;
+}
+
+/* ANIMATIONS */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.9); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* VICTORY OVERLAY */
+#victoryScreen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    border: 4px solid var(--accent-pink);
+    padding: 40px;
+    z-index: 100;
+    box-shadow: 0 0 50px var(--accent-pink);
+}

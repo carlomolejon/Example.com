@@ -1,2 +1,2 @@
 # Example.com
-Just an example for a workshop on webbed
+Just an example project for a workshop on webdev
